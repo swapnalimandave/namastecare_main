@@ -1,5 +1,6 @@
 -- Create RPC function to fetch clinical data by token
 -- This function uses SECURITY DEFINER to bypass RLS for authorized token holders
+-- Explicit type casts (::TEXT) are used to handle potential UUID vs TEXT column mismatches
 
 CREATE OR REPLACE FUNCTION public.get_clinical_data_by_token(token TEXT)
 RETURNS JSONB
@@ -35,20 +36,20 @@ BEGIN
         target_member_id := member_record.id;
     END IF;
 
-    -- Fetch Health Records
+    -- Fetch Health Records with explicit TEXT casts to avoid type errors
     SELECT COALESCE(JSONB_AGG(hr), '[]'::jsonb) INTO health_records_json
     FROM (
         SELECT * FROM public.health_records 
-        WHERE user_id = target_user_id 
+        WHERE user_id::TEXT = target_user_id::TEXT
         AND (member_name = target_member_name OR target_member_name = 'Self')
         ORDER BY created_at DESC
     ) hr;
 
-    -- Fetch Medicine Reminders
+    -- Fetch Medicine Reminders with explicit TEXT casts to avoid type errors
     SELECT COALESCE(JSONB_AGG(mr), '[]'::jsonb) INTO medicine_reminders_json
     FROM (
         SELECT * FROM public.medicine_reminders 
-        WHERE family_member_id = target_member_id
+        WHERE family_member_id::TEXT = target_member_id::TEXT
         AND active = true
     ) mr;
 

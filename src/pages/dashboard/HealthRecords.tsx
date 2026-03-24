@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Upload, FileText, AlertTriangle, CheckCircle2, AlertCircle, Loader2, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { db as supabase } from "@/lib/supabase";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { User } from "lucide-react";
 
 interface HealthFlag {
   label: string;
@@ -33,6 +35,8 @@ export default function HealthRecords() {
   const [records, setRecords] = useState<HealthRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [members, setMembers] = useState<{ id: string, name: string }[]>([]);
+  const [selectedMember, setSelectedMember] = useState("Self");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
@@ -50,8 +54,19 @@ export default function HealthRecords() {
     setLoading(false);
   };
 
+  const fetchMembers = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    const { data } = await supabase
+      .from("family_members")
+      .select("id, name")
+      .eq("user_id", user.id);
+    setMembers(data || []);
+  };
+
   useEffect(() => {
     fetchRecords();
+    fetchMembers();
   }, []);
 
   const handleViewReport = async (filePath: string) => {
@@ -99,7 +114,7 @@ export default function HealthRecords() {
 
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("memberName", "Self");
+      formData.append("memberName", selectedMember);
 
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/analyze-report`,
@@ -157,16 +172,29 @@ export default function HealthRecords() {
             ref={fileInputRef}
             type="file"
             accept="image/jpeg,image/png,image/webp,application/pdf"
-            className="hidden"
+             className="hidden"
             onChange={handleUpload}
           />
-          <Button size="sm" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
-            {uploading ? (
-              <><Loader2 className="h-4 w-4 mr-1 animate-spin" /> Analyzing…</>
-            ) : (
-              <><Upload className="h-4 w-4 mr-1" /> Upload Report</>
-            )}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Select value={selectedMember} onValueChange={setSelectedMember}>
+              <SelectTrigger className="w-[140px] h-9 text-xs">
+                <SelectValue placeholder="Select Member" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Self">Self (Me)</SelectItem>
+                {members.map((m) => (
+                  <SelectItem key={m.id} value={m.name}>{m.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button size="sm" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
+              {uploading ? (
+                <><Loader2 className="h-4 w-4 mr-1 animate-spin" /> Analyzing…</>
+              ) : (
+                <><Upload className="h-4 w-4 mr-1" /> Upload Report</>
+              )}
+            </Button>
+          </div>
         </div>
       </div>
 
