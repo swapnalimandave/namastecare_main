@@ -14,6 +14,7 @@ import FamilyMembers from "./pages/dashboard/FamilyMembers";
 import HealthRecords from "./pages/dashboard/HealthRecords";
 import MedicineReminders from "./pages/dashboard/MedicineReminders";
 import ProfilePage from "./pages/dashboard/ProfilePage";
+import SOSPage from "./pages/dashboard/SOSPage";
 import DoctorView from "./pages/DoctorView";
 import NotFound from "./pages/NotFound";
 
@@ -36,6 +37,7 @@ const App = () => (
               <Route path="records" element={<HealthRecords />} />
               <Route path="medicines" element={<MedicineReminders />} />
               <Route path="profile" element={<ProfilePage />} />
+              <Route path="sos" element={<SOSPage />} />
             </Route>
             <Route path="/doctor/:token" element={<DoctorView />} />
             <Route path="*" element={<NotFound />} />

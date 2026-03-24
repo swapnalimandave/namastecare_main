@@ -1,4 +1,4 @@
-import { Home, Users, FileText, Bell, User, Heart } from "lucide-react";
+import { Home, Users, FileText, Bell, User, Heart, AlertTriangle } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import {
@@ -18,6 +18,7 @@ const items = [
   { title: "Health Records", url: "/dashboard/records", icon: FileText },
   { title: "Medicine Reminders", url: "/dashboard/medicines", icon: Bell },
   { title: "Profile", url: "/dashboard/profile", icon: User },
+  { title: "Emergency SOS", url: "/dashboard/sos", icon: AlertTriangle },
 ];
 
 export function AppSidebar() {

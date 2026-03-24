@@ -112,8 +112,8 @@ export default function Index() {
 
       {/* Hero */}
       <section className="px-4 md:px-8 pt-16 pb-20 max-w-6xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="text-center lg:text-left animate-fade-in">
+        <div className="flex flex-col items-center text-center animate-fade-in max-w-4xl mx-auto">
+          <div className="text-center animate-fade-in w-full">
             <div className="flex flex-wrap justify-center lg:justify-start gap-2 mb-6">
               <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-xs font-medium px-3 py-1.5 rounded-full hover:bg-primary/20 hover:scale-105 hover:pulse transition-all duration-200 cursor-pointer">
                 <Shield className="h-3.5 w-3.5" /> Secure & Private
@@ -122,13 +122,13 @@ export default function Index() {
                 <CheckCircle className="h-3.5 w-3.5" /> Secure and compliant
               </div>
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground max-w-2xl mx-auto lg:mx-0 leading-[1.1] mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold text-foreground max-w-3xl mx-auto leading-[1.1] mb-6">
               You and Your family's health, <span className="text-primary">organized</span> and accessible
             </h1>
             <p className="text-muted-foreground text-lg md:text-xl max-w-lg mx-auto lg:mx-0 leading-relaxed mb-8">
               Store health records, track medicines, and share patient summaries with doctors — all in one place.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
               <Button size="lg" asChild className="bg-primary hover:bg-primary/90 hover:scale-105 hover:shadow-xl hover:glow transition-all duration-200 shadow-lg text-lg px-8 py-3 group">
                 <Link to="/signup">
                   Create Free Account
@@ -139,9 +139,6 @@ export default function Index() {
                 <Link to="/doctor/1">See Doctor View</Link>
               </Button>
             </div>
-          </div>
-          <div className="hidden lg:block animate-fade-in-delayed">
-            <HealthcareIllustration />
           </div>
         </div>
       </section>
